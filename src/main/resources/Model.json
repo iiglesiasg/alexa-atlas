@@ -1,0 +1,78 @@
+{
+  "interactionModel": {
+    "languageModel": {
+      "invocationName": "atlas",
+      "intents": [
+        {
+          "name": "AMAZON.CancelIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.HelpIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.StopIntent",
+          "samples": []
+        },
+        {
+          "name": "AMAZON.NavigateHomeIntent",
+          "samples": []
+        },
+        {
+          "name": "IntegrantesEquipos",
+          "slots": [
+            {
+              "name": "equipo",
+              "type": "equipoType"
+            }
+          ],
+          "samples": [
+            "por quien esta formado el equipo de {equipo}",
+            "quiero saber quien pertenece al equipo {equipo}",
+            "quienes son de {equipo}",
+            "cuales son los integrantes de {equipo}",
+            "quienes forman parte de {equipo}"
+          ]
+        }
+      ],
+      "types": [
+        {
+          "name": "equipoType",
+          "values": [
+            {
+              "name": {
+                "value": "core"
+              }
+            },
+            {
+              "name": {
+                "value": "express"
+              }
+            },
+            {
+              "name": {
+                "value": "arquitectura"
+              }
+            },
+            {
+              "name": {
+                "value": "framework"
+              }
+            },
+            {
+              "name": {
+                "value": "infra"
+              }
+            },
+            {
+              "name": {
+                "value": "plataforma"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
