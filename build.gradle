@@ -1,0 +1,69 @@
+import com.amazonaws.services.lambda.model.Runtime
+import jp.classmethod.aws.gradle.lambda.AWSLambdaMigrateFunctionTask
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+        classpath 'jp.classmethod.aws:gradle-aws-plugin:0.22'
+    }
+}
+
+plugins {
+    id 'net.ltgt.apt' version '0.10'
+}
+
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'jp.classmethod.aws.lambda'
+
+group 'alexa'
+version '1.0-SNAPSHOT'
+
+compileJava {
+    targetCompatibility = 1.8
+    sourceCompatibility = 1.8
+}
+
+repositories {
+    jcenter()
+}
+
+
+dependencies {
+    compile 'com.amazon.alexa:ask-sdk:2.7.2'
+    compileOnly 'org.projectlombok:lombok:1.18.4'
+
+    apt 'org.projectlombok:lombok:1.18.4'
+    compile 'log4j:log4j:1.2.17'
+    compile 'org.slf4j:slf4j-api:1.7.10'
+    compile 'com.amazonaws:aws-lambda-java-log4j:1.0.0'
+}
+
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtime
+    }
+}
+
+aws {
+    region = 'us-west-2'
+}
+
+task deploy(type: AWSLambdaMigrateFunctionTask, dependsOn: build) {
+    functionName = "integrantesEquipos"
+    handler = "alexa.AlexaStreamHandler"
+    role = "arn:aws:iam::${aws.accountId}:role/lambdaBasicAuth"
+    runtime = Runtime.Java8
+    zipFile = shadowJar.archivePath
+    memorySize = 512
+    timeout = 60
+}
+
+build.dependsOn shadowJar
+
